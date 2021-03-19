@@ -1,84 +1,53 @@
-import React from 'react';
-//import { v4 as uuidv4 } from 'uuid';
-//import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ContactForm from '../ContactForm/ContactForm';
 import ContactList from '../ContactList/ContactList';
 import Filter from '../Filter/Filter';
 import { CSSTransition } from 'react-transition-group';
 import styles from './App.module.css';
+import Loader from '../Loader/Loader';
+import contactSelectors from '../../redux/contact-selectors';
+import contactOperations from '../../redux/contact-operations';
 
-export default function App(props) {
-//  static defaultProps = {
-//     name: '',
-//     number: '',
-//   };
-  // state = {
-  //   contacts: [ ],
-  //   filter: '',
-  //}
-
-  // handleAddContact = (newContact) =>
-  //   this.setState(prevState => ({
-  //   contacts: [...prevState.contacts, newContact],
-  // }))
-
-  // handleRemoveContact = (id) => {
-  //   this.setState(prevState => {
-  //     return {
-  //       contacts: prevState.contacts.filter((contact) => contact.id !== id)
-  //     }
-  //   })
-  // }
-  
-  // handleFilterChange = (filter) => this.setState({ filter })
-  
-  // getVisibleContacts = () => {
-  //   const { contacts, filter } = this.state;
-  //   return contacts.filter((contact) => contact.name.toLowerCase().includes(filter.toLowerCase()),
-  //   );
-  // }
-
-  //   componentDidMount() {
-  //   const parsedContacts = JSON.parse(localStorage.getItem('contacts'));
-  //   if (parsedContacts) {
-  //     this.setState(() => {
-  //       return {
-  //         contacts: parsedContacts,
-  //       };
-  //     });
-  //   }  
-  // }
-
-  // componentDidUpdate(prevState) {
-  //   if (prevState.contacts !== this.state.contacts) {
-  //       localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-  //   }
-  // }
-
-// render() {
-    //const { filter } = this.state
-    //const visibleContacts = this.getVisibleContacts();
+class App extends Component {
+  componentDidMount() {
+    this.props.fetchContacts();
+  }
+  render() {
     return (
+    <>
+      {this.props.isLoading && <Loader />}
       <div className={styles.container}>
-      <CSSTransition
-        in={true}
-        appear={true}
-        classNames={styles}
-        timeout={500}
-        unmountOnExit
+        <CSSTransition
+          in={true}
+          appear={true}
+          classNames={styles}
+          timeout={500}
+          unmountOnExit
         >
-        <h2 className={styles.tittle}>Phonebook</h2>
-      </CSSTransition>
+          <h2 className={styles.tittle}>Phonebook</h2>
+        </CSSTransition>
 
-      <ContactForm />
-      <div className={styles.filter}>
-        <h2>find contact</h2>
-      <Filter />
+        <ContactForm />
+        <div className={styles.filter}>
+          <h2>find contact</h2>
+          <Filter />
         </div>
-      <ContactList />
-  </div>
+        <ContactList />
+        </div>
+      </>
     );
-   }
-// }
+  }
+}
+
+const mapStateToProps = state => ({
+  isLoading: contactSelectors.getLoading(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchContacts: () => dispatch(contactOperations.fetchContacts()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 

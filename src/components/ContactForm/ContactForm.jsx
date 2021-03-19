@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
-//import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
 import styles from './ContactForm.module.css';
 import errorStyles from '../ErrorMessage/ErrorMessage.module.css';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import { connect } from 'react-redux';
-import {addContact} from '../../redux/contact-actions';
+//import {addContact} from '../../redux/contact-actions';
+import contactOperations from '../../redux/contact-operations';
+import contactSelectors from '../../redux/contact-selectors';
 
 class ContactForm extends Component {
-//   static propTypes = {
-//     contacts: PropTypes.array.isRequired,
-//     filter: PropTypes.string,
-//     error: PropTypes.string,
-//   };
     
     static propTypes = {
     onAdd: PropTypes.func.isRequired,
@@ -44,21 +40,17 @@ class ContactForm extends Component {
 
     validateForm = () => {
         const { name, phone } = this.state;
-        // const { contacts } = this.props
-        // const isExistContact = !!contacts.find((item) => item.name === name);
               
 const { items } = this.props
         const isExistContact = !!items.find((contact) => contact.name.toLowerCase() === name.toLowerCase());
 
         if (!name || !phone) {
-            //alert('Some filed is empty')
             this.setState({ error: 'Some filed is empty' });
             return setTimeout(() => {
         this.setState({ error: null });
       }, 2000);
         }
         if (isExistContact) {
-            //alert('Contact is already exist');
             this.setState({ error: 'Contact is already exist' });
             return setTimeout(() => {
         this.setState({ error: null });
@@ -72,7 +64,6 @@ const { items } = this.props
 
     render() {
         const { name, phone, error } = this.state;
-        //const { contacts } = this.props;
         return (
             <> 
             <form className={styles.form} onSubmit={this.handleFormSubmit}>
@@ -106,12 +97,13 @@ ContactForm.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        items: state.contacts.items,
+        items: contactSelectors.getAllContacts(state),
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    onAdd: (name, phone) => dispatch(addContact(name, phone)),
+    onAdd: (name, phone) =>
+        dispatch(contactOperations.addContact(name, phone)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

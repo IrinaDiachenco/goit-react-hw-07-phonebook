@@ -3,16 +3,9 @@ import PropTypes from 'prop-types';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styles from './ContactList.module.css';
 import { connect } from 'react-redux';
-import { deleteContact } from '../../redux/contact-actions';
-
-// const ContactListItem = ({ id, name, phone, onRemove }) => {
-//     return (
-//         <li key={id}>
-//         {name}: {phone} <button className={styles.button} id={id} onClick={() => onRemove(id)}>x</button>
-//         </li>
-    
-//     )
-// };
+//import { deleteContact } from '../../redux/contact-actions';
+import contactOperations from '../../redux/contact-operations';
+import contactSelectors from '../../redux/contact-selectors';
 
 class ContactList extends Component {
   static propTypes = {
@@ -22,11 +15,8 @@ class ContactList extends Component {
 
   render() {
     const { items, onRemove } = this.props;
-    // const ContactList = ({ contacts, onRemove}) => {
-    //     if (contacts.length === 0) return null
     return (
       <TransitionGroup component="ul" className={styles.list}>
-        {/* {contacts.map(({ name, phone, id }) => { */}
         {items.map(({name, phone, id}) => {
           return (
             <CSSTransition
@@ -35,7 +25,6 @@ class ContactList extends Component {
               timeout={300}
               unmountOnExit
             >
-              {/* <ContactListItem /> */}
               <li key={id}>
                 {name}: {phone} <button className={styles.button} id={id} onClick={() => onRemove(id)}>x</button>
               </li>
@@ -58,25 +47,26 @@ ContactList.propTypes = {
   onRemove: PropTypes.func.isRequired,
 };
 
-const getVisibleContacts = (contacts, filter) => {
-  return contacts.filter(({ name }) =>
-    name.toLowerCase().includes(filter.toLowerCase()),
-  );
-};
+// const getVisibleContacts = (contacts, filter) => {
+//   return contacts.filter(({ name }) =>
+//     name.toLowerCase().includes(filter.toLowerCase()),
+//   );
+// };
 
-const mapStateToProps = state => {
-  const { items, filter } = state.contacts;
+const mapStateToProps = state => ({
+  //const { items, filter } = state.contacts;
 
-  const visibleContacts = getVisibleContacts(items, filter);
+  // const visibleContacts = getVisibleContacts(items, filter);
 
-  return {
-    //items: visibleContacts,
-    items: visibleContacts.length > 0 ? visibleContacts : items,
-  };
-};
+  // return {
+  //   items: visibleContacts.length > 0 ? visibleContacts : items,
+  // };
+
+  items: contactSelectors.getVisibleContacts(state),
+});
 
 const mapDispatchToProps = dispatch => ({
-  onRemove: id => dispatch(deleteContact(id)),
+  onRemove: id => dispatch(contactOperations.deleteContact(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
