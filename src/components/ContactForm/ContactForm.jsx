@@ -7,7 +7,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import { connect } from 'react-redux';
 //import {addContact} from '../../redux/contact-actions';
 import {addContact} from '../../redux/contact-operations';
-import { getAllContacts } from '../../redux/contact-selectors';
+import selectors from '../../redux/contact-selectors';
 
 class ContactForm extends Component {
 
@@ -36,15 +36,18 @@ class ContactForm extends Component {
 
     validateForm = () => {
         const { name, phone } = this.state;
-              
-const { items } = this.props
-        const isExistContact = !!items.find((contact) => contact.name.toLowerCase() === name.toLowerCase());
-
+        
+        const { items, contacts } = this.props;  
+        //const isExistContact = !!items.find((contacts) => contacts.name.toLowerCase() === name.toLowerCase());
+        const isExistContact = !!contacts.find((items) => items.name.toLowerCase() === name.toLowerCase());
+        //console.log('items', items);
+        
         if (!name || !phone) {
             this.setState({ error: 'Some filed is empty' });
             return setTimeout(() => {
         this.setState({ error: null });
-      }, 2000);
+            }, 2000);
+            
         }
         if (isExistContact) {
             this.setState({ error: 'Contact is already exist' });
@@ -52,6 +55,7 @@ const { items } = this.props
         this.setState({ error: null });
       }, 2000);
         }
+        
     } 
 
     resetForm = () => {
@@ -60,6 +64,7 @@ const { items } = this.props
 
     render() {
         const { name, phone, error } = this.state;
+        
         return (
             <> 
             <form className={styles.form} onSubmit={this.handleFormSubmit}>
@@ -86,7 +91,7 @@ const { items } = this.props
 }
 
 const mapStateToProps = (state) => ({
-        contacts: getAllContacts(state),
+        contacts: selectors.getAllContacts(state),
 });
 
 const mapDispatchToProps = dispatch => ({

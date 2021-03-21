@@ -5,7 +5,7 @@ import styles from './ContactList.module.css';
 import { connect } from 'react-redux';
 //import { deleteContact } from '../../redux/contact-actions';
 import { deleteContact } from '../../redux/contact-operations';
-import { getVisibleContacts } from '../../redux/contact-selectors';
+import selectors from '../../redux/contact-selectors';
 
 //class ContactList extends Component {
 const ContactList = ({ contacts, onRemove }) => {
@@ -72,7 +72,7 @@ const mapStateToProps = state => ({
   //   items: visibleContacts.length > 0 ? visibleContacts : items,
   // };
 
-  contacts: getVisibleContacts(state),
+  contacts: selectors.getVisibleContacts(state),
 });
 
 const mapDispatchToProps = dispatch => ({
