@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
 import styles from './ContactForm.module.css';
 import errorStyles from '../ErrorMessage/ErrorMessage.module.css';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import { connect } from 'react-redux';
 //import {addContact} from '../../redux/contact-actions';
-import contactOperations from '../../redux/contact-operations';
-import contactSelectors from '../../redux/contact-selectors';
+import {addContact} from '../../redux/contact-operations';
+import { getAllContacts } from '../../redux/contact-selectors';
 
 class ContactForm extends Component {
-    
-    static propTypes = {
-    onAdd: PropTypes.func.isRequired,
-  };
 
     state = {
         name: "",
@@ -89,21 +85,13 @@ const { items } = this.props
     }
 }
 
-ContactForm.propTypes = {
-        name: PropTypes.string,
-        phone: PropTypes.number,
-        onCheckUnique: PropTypes.func,
-};
-
-const mapStateToProps = (state) => {
-    return {
-        items: contactSelectors.getAllContacts(state),
-    }
-};
+const mapStateToProps = (state) => ({
+        contacts: getAllContacts(state),
+});
 
 const mapDispatchToProps = dispatch => ({
     onAdd: (name, phone) =>
-        dispatch(contactOperations.addContact(name, phone)),
+        dispatch(addContact(name, phone)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

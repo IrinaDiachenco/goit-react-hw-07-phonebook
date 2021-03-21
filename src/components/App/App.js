@@ -6,8 +6,8 @@ import Filter from '../Filter/Filter';
 import { CSSTransition } from 'react-transition-group';
 import styles from './App.module.css';
 import Loader from '../Loader/Loader';
-import contactSelectors from '../../redux/contact-selectors';
-import contactOperations from '../../redux/contact-operations';
+import { getLoading, getAllContacts } from '../../redux/contact-selectors';
+import { fetchContacts } from '../../redux/contact-operations';
 
 class App extends Component {
   componentDidMount() {
@@ -41,13 +41,15 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  isLoading: contactSelectors.getLoading(state),
+  contacts: getAllContacts(state),
+  isLoading: getLoading(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchContacts: () => dispatch(contactOperations.fetchContacts()),
+  fetchContacts: () => dispatch(fetchContacts()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
+
 
 
