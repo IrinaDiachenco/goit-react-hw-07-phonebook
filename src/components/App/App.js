@@ -6,8 +6,8 @@ import Filter from '../Filter/Filter';
 import { CSSTransition } from 'react-transition-group';
 import styles from './App.module.css';
 import Loader from '../Loader/Loader';
-import selectors from '../../redux/contact-selectors';
-import { fetchContacts } from '../../redux/contact-operations';
+import selectors from '../../redux/contact/contact-selectors';
+import { fetchContacts } from '../../redux/contact/contact-operations';
 
 class App extends Component {
   componentDidMount() {

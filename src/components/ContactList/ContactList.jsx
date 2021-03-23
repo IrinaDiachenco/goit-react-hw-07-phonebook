@@ -4,8 +4,8 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styles from './ContactList.module.css';
 import { connect } from 'react-redux';
 //import { deleteContact } from '../../redux/contact-actions';
-import { deleteContact } from '../../redux/contact-operations';
-import selectors from '../../redux/contact-selectors';
+import { deleteContact } from '../../redux/contact/contact-operations';
+import selectors from '../../redux/contact/contact-selectors';
 
 //class ContactList extends Component {
 const ContactList = ({ contacts, onRemove }) => {

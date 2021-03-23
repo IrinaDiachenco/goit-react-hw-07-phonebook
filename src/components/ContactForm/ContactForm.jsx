@@ -6,8 +6,8 @@ import errorStyles from '../ErrorMessage/ErrorMessage.module.css';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import { connect } from 'react-redux';
 //import {addContact} from '../../redux/contact-actions';
-import {addContact} from '../../redux/contact-operations';
-import selectors from '../../redux/contact-selectors';
+import {addContact} from '../../redux/contact/contact-operations';
+import selectors from '../../redux/contact/contact-selectors';
 
 class ContactForm extends Component {
 
@@ -37,7 +37,7 @@ class ContactForm extends Component {
     validateForm = () => {
         const { name, phone } = this.state;
         
-        const { items, contacts } = this.props;  
+        const { contacts } = this.props;  
         //const isExistContact = !!items.find((contacts) => contacts.name.toLowerCase() === name.toLowerCase());
         const isExistContact = !!contacts.find((items) => items.name.toLowerCase() === name.toLowerCase());
         //console.log('items', items);
